@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {View, Text, SafeAreaView, Pressable, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Pressable,
+  FlatList,
+  Image,
+} from 'react-native';
 import {Divider} from 'react-native-paper';
 import {styles} from './styles';
 import Chat from '../../assets/chat.png';
@@ -66,24 +73,46 @@ const OpenAI = () => {
     setInput('');
   };
 
+  const handleRegenerateResponse = () => {
+    setInput(base);
+    setBase(input);
+    handleSendMessage();
+  };
+
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={'#ffffff'} barStyle="dark-content" />
+      <StatusBar backgroundColor={'#343541'} barStyle="light-content" />
       {isLoading && Loading()}
       <FlatList
         data={sentMessagesAndResponses}
         keyExtractor={(item: Message) =>
           `${Math.random()}+${item.timestamp ? item.timestamp.getTime() : ''}`
         } // use timestamp property as part of the key
+        showsVerticalScrollIndicator={false}
         renderItem={({item}: {item: Message}) => (
           <View
             style={{
-              backgroundColor: item.role === 'user' ? '#e6e6e6' : '#2f95dc',
-              padding: 10,
-              borderRadius: 10,
-              margin: 5,
+              backgroundColor: item.role === 'user' ? '#343541' : '#444654',
+              padding: 0,
+              borderRadius: 0,
+              margin: 0,
+              borderBottomColor: '#202123',
+              borderBottomWidth: 1,
             }}>
-            <Text style={{color: item.role === 'user' ? '#333' : '#fff'}}>
+            <>
+              {item.role !== 'user' ? (
+                <Image source={Chat} style={styles.image} />
+              ) : null}
+            </>
+            <Text
+              style={{
+                color: item.role === 'user' ? '#fff' : '#fff',
+                marginLeft: '3%',
+                marginRight: '2%',
+                marginBottom: '4%',
+                paddingHorizontal: '2%',
+                marginTop: item.role === 'user' ? '4%' : '2%',
+              }}>
               {item.content}
             </Text>
           </View>
@@ -100,47 +129,55 @@ const OpenAI = () => {
           {/* <Text selectable style={styles.response}>
             {response}
           </Text> */}
-          <Divider />
+          {/* <Divider /> */}
           <View
             style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'space-evenly',
               flexDirection: 'row',
-              marginVertical: 20,
+              marginTop: '6%',
+              marginBottom: '2%',
+              width: '100%',
             }}>
             <Pressable
               style={{
                 padding: 8,
-                backgroundColor: '#28a47c',
+                backgroundColor: '#343541',
                 borderRadius: 2,
-                marginHorizontal: 20,
+                borderColor: '#848590',
+                borderWidth: 1,
               }}
               android_ripple={{color: 'white'}}
               onPress={() => {
-                setInput('');
+                setSentMessagesAndResponses([]);
               }}>
               <Text style={{color: 'white'}}>Clear</Text>
             </Pressable>
             <Pressable
               style={{
                 padding: 8,
-                backgroundColor: '#28a47c',
+                backgroundColor: '#343541',
                 borderRadius: 2,
-                marginHorizontal: 20,
+                // marginHorizontal: 20,
+                borderColor: '#848590',
+                borderWidth: 1,
               }}
-              android_ripple={{color: 'white'}}
-              onPress={() => {
-                setInput(base);
-                setBase(input);
-                handleSendMessage();
-              }}>
+              android_ripple={{
+                color: 'white',
+                borderless: true,
+                radius: 25,
+                foreground: false,
+              }}
+              onPress={handleRegenerateResponse}>
               <Text style={{color: 'white'}}>Regenerate response</Text>
             </Pressable>
           </View>
         </View>
       ) : null}
-      {sentMessagesAndResponses.length === 0 && !isLoading && <Examples setInput={setInput} />}
+      {sentMessagesAndResponses.length === 0 && !isLoading && (
+        <Examples setInput={setInput} />
+      )}
       <InputSubmit
         input={input}
         setInput={setInput}

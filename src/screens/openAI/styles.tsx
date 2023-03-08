@@ -5,9 +5,9 @@ export const styles = StyleSheet.create({
     height: 30,
     width: 30,
     padding: 10,
-    marginTop: 10,
+    marginTop: '5%',
     marginBottom: 0,
-    marginLeft: 15,
+    marginLeft: '5%',
     borderRadius: 2,
   },
   card: {
@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#343541',
     // backgroundColor: '#484454',
   },
   button: {

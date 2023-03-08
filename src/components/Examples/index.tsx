@@ -1,4 +1,4 @@
-import {Pressable, StyleSheet, Text} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Card} from 'react-native-paper';
 import {Suggestions} from '../../helpers/suggestions';
@@ -10,7 +10,7 @@ type Props = {
 
 const Examples = ({...props}: Props) => {
   return (
-    <>
+    <View style={{flex: 1, marginBottom: '40%'}}>
       <Text
         style={{
           textAlign: 'center',
@@ -32,7 +32,7 @@ const Examples = ({...props}: Props) => {
           <Text style={styles.example}>{Suggestions.Two}</Text>
         </Pressable>
       </Card>
-    </>
+    </View>
   );
 };
 

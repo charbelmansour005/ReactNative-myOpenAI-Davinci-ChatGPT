@@ -2,15 +2,14 @@ import React from 'react';
 import {View} from 'react-native';
 import {styles} from './styles';
 import LottieView from 'lottie-react-native';
+// import CursorLoader from '../../assets/json/'
 
 const ShowApiBusy = (): JSX.Element => (
   <View style={styles.center}>
     <LottieView
-      speed={115}
+      speed={1}
       style={styles.animation}
-      source={{
-        uri: 'https://assets7.lottiefiles.com/packages/lf20_xlowl4wu.json',
-      }}
+      source={require('../../assets/json/99274-loading.json')}
       autoPlay={true}
       loop={true}
     />
