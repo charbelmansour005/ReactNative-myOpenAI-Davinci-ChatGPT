@@ -1,108 +1,77 @@
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  Image,
-  SafeAreaView,
-  Pressable,
-  FlatList,
-} from 'react-native';
+import {View, Text, SafeAreaView, Pressable, FlatList} from 'react-native';
 import {Divider} from 'react-native-paper';
 import {styles} from './styles';
 import Chat from '../../assets/chat.png';
 import {CONTANTS} from '../../helpers/api';
-import axios from 'axios';
 import {StatusBar} from 'react-native';
-import {useMutation} from 'react-query';
+import {useToast} from 'react-native-toast-notifications';
 
 import {Examples, InputSubmit, Loading} from '../../components';
+import {useMutation} from '@tanstack/react-query';
+import {sendMessage, sentDataModel} from '../../helpers/sendMessage';
 
-type Message = {
+export type Message = {
   id: string;
   role: string;
   content: string;
   timestamp: Date;
 };
 
-interface Choice {
-  message: Message;
-  index: number;
-}
-
-interface Completion {
-  id: string;
-  object: string;
-  created: number;
-  model: string;
-  usage: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
-  choices: Choice[];
+interface ErrorResponseMessage {
+  response: {data: {error: {message: string}}};
 }
 
 const OpenAI = () => {
-  const [input, setInput] = useState<string>('');
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [response, setResponse] = useState<Message[]>([]);
-  // const [response, setResponse] = useState<string | null>(null);
+  const toast = useToast();
+  const [input, setInput] = useState('');
+  const [sentMessagesAndResponses, setSentMessagesAndResponses] = useState<
+    Message[]
+  >([]);
   const [base, setBase] = useState<any>(null);
 
-  const {mutate, isLoading: isOpenAIing} = useMutation(
-    async () => {
-      const token = CONTANTS.myToken;
-      const payload = {
-        model: 'gpt-3.5-turbo',
-        messages: [{role: 'user', content: input}],
-      };
-      const headers = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      };
-      const response = await axios.post(CONTANTS.URL, payload, {
-        headers: headers,
-      });
-      return response.data;
+  const {mutate, isLoading} = useMutation({
+    mutationFn: ({messages, model}: sentDataModel) =>
+      sendMessage({messages, model}),
+    onSuccess: async response => {
+      setSentMessagesAndResponses(prevSentMessagesAndResponses => [
+        ...prevSentMessagesAndResponses,
+        response.choices[0].message,
+      ]);
     },
-    {
-      onSuccess: async response => {
-        try {
-          const botMessage = response.choices[0].message;
-          setResponse(prev => [...prev, botMessage]);
-        } catch (error: any) {
-          throw new Error(error);
-        }
-      },
-      onError: (error: any) => {
-        if (error.response) {
-          const message = error.response.data.message;
-          console.log(message);
-        }
-      },
+    onError: (error: ErrorResponseMessage) => {
+      toast.show(
+        (error as ErrorResponseMessage)?.response?.data?.error?.message,
+        CONTANTS.toastOptions,
+      );
     },
-  );
+  });
 
   const handleSendMessage = () => {
-    if (input === '') return;
+    if (!input) return;
     const message = {
       id: new Date().toISOString(),
       role: 'user',
       content: input,
       timestamp: new Date(), // add timestamp property
     };
-    setMessages(prev => [...prev, message]);
-    mutate();
+    setSentMessagesAndResponses(prevSentMessagesAndResponses => [
+      ...prevSentMessagesAndResponses,
+      message,
+    ]);
+    mutate({
+      model: CONTANTS.openAiModel,
+      messages: [{content: input, role: 'user'}],
+    });
     setInput('');
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={'#ffffff'} barStyle="dark-content" />
-      {isOpenAIing && Loading()}
+      {isLoading && Loading()}
       <FlatList
-        data={messages.concat(response)}
+        data={sentMessagesAndResponses}
         keyExtractor={(item: Message) =>
           `${Math.random()}+${item.timestamp ? item.timestamp.getTime() : ''}`
         } // use timestamp property as part of the key
@@ -120,7 +89,7 @@ const OpenAI = () => {
           </View>
         )}
       />
-      {response.length > 1 && !isOpenAIing ? (
+      {sentMessagesAndResponses.length > 1 && !isLoading ? (
         <View style={{marginBottom: 80}}>
           {/* <Divider style={{height: 0.5}} /> */}
           {/* <Text selectable style={styles.baseFont}>
@@ -171,11 +140,11 @@ const OpenAI = () => {
           </View>
         </View>
       ) : null}
-      {!response && !isOpenAIing && <Examples setInput={setInput} />}
+      {sentMessagesAndResponses.length === 0 && !isLoading && <Examples setInput={setInput} />}
       <InputSubmit
         input={input}
         setInput={setInput}
-        loading={isOpenAIing}
+        loading={isLoading}
         setBase={setBase}
         handleSubmit={handleSendMessage}
       />

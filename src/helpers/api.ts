@@ -1,3 +1,5 @@
+import {ToastOptions} from 'react-native-toast-notifications/lib/typescript/toast';
+
 type Constants = {
   myToken: string;
   URL: string;
@@ -5,12 +7,21 @@ type Constants = {
   signUpURL: string;
   signInURL: string;
   returnSecureToken: boolean;
+  openAiModel: string;
+  toastOptions: ToastOptions;
 };
 
 const firebaseAPIKey = 'AIzaSyCdO4EhlwTBUqEUR1KtsnxTX_B9BsR2X0o';
 const grant_type = 'refresh_token';
 
 export const CONTANTS: Constants = {
+  toastOptions: {
+    placement: 'top',
+    animationType: 'zoom-in',
+    duration: 5000,
+    type: 'danger',
+  },
+  openAiModel: 'gpt-3.5-turbo',
   // use this sucka
   // YD83EOnyB0X4qitl2LSsT3BlbkFJu3TT2bhIvhXYiMIfHbQZ
   myToken: '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',

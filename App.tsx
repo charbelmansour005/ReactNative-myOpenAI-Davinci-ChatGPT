@@ -1,15 +1,19 @@
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet} from 'react-native';
 import React from 'react';
 import OpenAI from './src/screens/openAI';
-import {QueryClientProvider, QueryClient} from 'react-query';
-
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
+import {ToastProvider} from 'react-native-toast-notifications';
 type Props = {};
+
+const queryClient = new QueryClient();
 
 const App = (props: Props) => {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
-      <OpenAI />
+      <ToastProvider>
+        <OpenAI />
+      </ToastProvider>
     </QueryClientProvider>
   );
 };
