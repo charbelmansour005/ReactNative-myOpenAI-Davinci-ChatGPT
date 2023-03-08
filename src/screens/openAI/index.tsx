@@ -107,7 +107,7 @@ const OpenAI = () => {
             <Text
               style={{
                 color: item.role === 'user' ? '#fff' : '#fff',
-                marginLeft: '3%',
+                marginLeft: '1%',
                 marginRight: '2%',
                 marginBottom: '4%',
                 paddingHorizontal: '2%',

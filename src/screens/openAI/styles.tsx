@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
     padding: 10,
     marginTop: '5%',
     marginBottom: 0,
-    marginLeft: '5%',
+    marginLeft: '3%',
     borderRadius: 2,
   },
   card: {
