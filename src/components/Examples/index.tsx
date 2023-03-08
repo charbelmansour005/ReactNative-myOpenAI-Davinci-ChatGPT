@@ -1,6 +1,7 @@
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {Card} from 'react-native-paper';
+import Chat from '../../assets/sun.png';
 import {Suggestions} from '../../helpers/suggestions';
 import {styles} from './styles';
 
@@ -10,24 +11,38 @@ type Props = {
 
 const Examples = ({...props}: Props) => {
   return (
-    <View style={{flex: 1, marginBottom: '40%'}}>
-      <Text
+    <View style={{flex: 1, marginBottom: '80%'}}>
+      <View
         style={{
-          textAlign: 'center',
-          ...styles.response,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}>
-        Examples
-      </Text>
-      <Card mode="elevated" style={styles.card}>
+        <Image source={Chat} style={styles.image} />
+        <Text
+          style={{
+            textAlign: 'center',
+            ...styles.response,
+          }}>
+          Examples
+        </Text>
+      </View>
+
+      <Card mode="outlined" style={styles.card}>
         <Pressable
           style={styles.pressable}
-          android_ripple={{color: 'gray'}}
+          android_ripple={{
+            color: 'white',
+          }}
           onPress={() => props.setInput(Suggestions.One)}>
           <Text style={styles.example}>{Suggestions.One}</Text>
         </Pressable>
         <Pressable
           style={styles.pressable}
-          android_ripple={{color: 'gray'}}
+          android_ripple={{
+            color: 'white',
+          }}
           onPress={() => props.setInput(Suggestions.Two)}>
           <Text style={styles.example}>{Suggestions.Two}</Text>
         </Pressable>
