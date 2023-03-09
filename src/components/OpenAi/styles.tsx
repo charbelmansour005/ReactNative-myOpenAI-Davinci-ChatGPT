@@ -9,8 +9,8 @@ export const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   image: {
-    height: 30,
-    width: 30,
+    height: 28,
+    width: 28,
     padding: 10,
     marginTop: '5%',
     marginBottom: 0,

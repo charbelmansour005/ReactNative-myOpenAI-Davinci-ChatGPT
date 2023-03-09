@@ -3,21 +3,19 @@ import {StyleSheet} from 'react-native';
 export const styles = StyleSheet.create({
   pressable: {
     padding: 5,
-    backgroundColor: '#3e3f4b',
+    backgroundColor: '#343541',
     borderRadius: 2,
     margin: '5%',
     borderColor: 'gray',
     borderWidth: 1,
   },
   image: {
-    height: 35,
-    width: 35,
-    // padding: 10,
+    height: 30,
+    width: 30,
     borderRadius: 2,
   },
   card: {
     borderRadius: 5,
-    // padding: 20,
     backgroundColor: '#3e3f4b',
     display: 'flex',
     alignItems: 'center',

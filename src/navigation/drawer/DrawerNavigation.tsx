@@ -1,12 +1,14 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import AboutUs from '../../screens/Info';
-import OpenAI from '../../screens/openAI';
+import ChatGPT from '../../screens/openAI';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from 'react-native-paper';
+import Davinci from '../../screens/davinci/index';
 
 type DrawerNavigationParams = {
-  OpenAi: undefined;
+  ChatGPT: undefined;
   AboutUs: undefined;
+  Davinci: undefined;
 };
 
 const Drawer = createDrawerNavigator<DrawerNavigationParams>();
@@ -14,7 +16,7 @@ const Drawer = createDrawerNavigator<DrawerNavigationParams>();
 export default function DrawerNavigator() {
   return (
     <Drawer.Navigator
-      initialRouteName="OpenAi"
+      initialRouteName="ChatGPT"
       screenOptions={({route}) => ({
         headerTintColor: 'white',
         headerStyle: {backgroundColor: '#343541'},
@@ -23,11 +25,14 @@ export default function DrawerNavigator() {
           let iconName = '';
 
           switch (route.name) {
-            case 'OpenAi':
+            case 'ChatGPT':
               iconName = focused ? 'head-snowflake-outline' : 'head-snowflake';
               break;
             case 'AboutUs':
               iconName = focused ? 'information-outline' : 'information';
+              break;
+            case 'Davinci':
+              iconName = focused ? 'book-check-outline' : 'book-check';
               break;
           }
           return <Icon name={iconName} color={color} size={size} />;
@@ -35,11 +40,14 @@ export default function DrawerNavigator() {
         drawerLabel: ({color, focused}) => {
           let children = '';
           switch (route.name) {
-            case 'OpenAi':
-              children = 'Open AI';
+            case 'ChatGPT':
+              children = 'ChatGPT';
               break;
             case 'AboutUs':
               children = 'About Us';
+              break;
+            case 'Davinci':
+              children = 'Davinci';
               break;
             default:
               children = '';
@@ -50,14 +58,21 @@ export default function DrawerNavigator() {
         },
       })}>
       <Drawer.Screen
-        name="OpenAi"
-        component={OpenAI}
-        options={{headerTitle: 'Open AI'}}
+        name="ChatGPT"
+        component={ChatGPT}
+        options={{headerTitle: 'ChatGPT'}}
       />
+
       <Drawer.Screen
         name="AboutUs"
         component={AboutUs}
-        options={{headerTitle: 'About Us'}}
+        options={{headerTitle: ''}}
+      />
+
+      <Drawer.Screen
+        name="Davinci"
+        component={Davinci}
+        options={{headerTitle: 'Davinci'}}
       />
     </Drawer.Navigator>
   );

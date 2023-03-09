@@ -89,8 +89,6 @@ const OpenAI = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar backgroundColor={'#343541'} barStyle="light-content" />
-      {/* {isLoading && Loading()} */}
-
       <FlatList
         ref={flatListRef}
         onScroll={e => setContentVerticalOffset(e.nativeEvent.contentOffset.y)}
@@ -101,7 +99,7 @@ const OpenAI = () => {
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
           <>
-            {sentMessagesAndResponses.length !== 0 ? (
+            {sentMessagesAndResponses.length !== 0 && !isLoading ? (
               <View style={styles.footerWrapper}>
                 <Pressable
                   disabled={isLoading}
@@ -161,24 +159,3 @@ const OpenAI = () => {
 };
 
 export default OpenAI;
-
-{
-  /* <Divider style={{height: 0.5}} /> */
-}
-{
-  /* <Text selectable style={styles.baseFont}>
-            You: {base}
-          </Text>
-          <Divider style={{height: 0.5}} /> */
-}
-{
-  /* <Image source={Chat} style={styles.image} /> */
-}
-{
-  /* <Text selectable style={styles.response}>
-            {response}
-          </Text> */
-}
-{
-  /* <Divider /> */
-}

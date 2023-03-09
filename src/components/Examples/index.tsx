@@ -11,7 +11,7 @@ type Props = {
 
 const Examples = ({setInput}: Props) => {
   return (
-    <View style={{flex: 1, marginBottom: '80%'}}>
+    <View style={{height: '100%', width: '50%', marginTop: '50%'}}>
       <View
         style={{
           display: 'flex',
