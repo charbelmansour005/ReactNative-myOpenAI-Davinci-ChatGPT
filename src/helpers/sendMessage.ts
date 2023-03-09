@@ -1,6 +1,7 @@
 import axios from 'axios';
 // import {API_TOKEN} from '@env';
-const API_TOKEN = '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';
+const API_TOKEN = 'sk-hahahahahahah';
+// const API_TOKEN = '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';
 import {CONTANTS} from './api';
 import {Message} from '../screens/openAI';
 
