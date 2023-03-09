@@ -1,12 +1,12 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {Card} from 'react-native-paper';
 import Chat from '../../assets/sun.png';
 import {Suggestions} from '../../helpers/suggestions';
 import {styles} from './styles';
 
 type Props = {
-  setInput: (args?: any) => void;
+  setInput: Dispatch<SetStateAction<string>>;
 };
 
 const Examples = ({setInput}: Props) => {

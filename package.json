@@ -18,8 +18,7 @@
     "react-native-dotenv": "^3.4.8",
     "react-native-paper": "^5.2.0",
     "react-native-toast-notifications": "^3.3.1",
-    "react-native-vector-icons": "^9.2.0",
-    "react-redux": "^8.0.5"
+    "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
@@ -29,6 +28,7 @@
     "@types/jest": "^26.0.23",
     "@types/react": "^18.0.21",
     "@types/react-native": "^0.70.6",
+    "@types/react-native-vector-icons": "^6.4.13",
     "@types/react-test-renderer": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
     "@typescript-eslint/parser": "^5.37.0",

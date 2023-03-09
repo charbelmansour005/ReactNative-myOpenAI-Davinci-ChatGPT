@@ -4,7 +4,7 @@ import {styles} from './styles';
 import LottieView from 'lottie-react-native';
 // import CursorLoader from '../../assets/json/'
 
-const ShowApiBusy = (): JSX.Element => (
+const ShowApiBusy = () => (
   <View style={styles.center}>
     <LottieView
       speed={1}

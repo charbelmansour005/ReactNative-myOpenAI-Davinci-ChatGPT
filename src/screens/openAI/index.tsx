@@ -1,6 +1,6 @@
 import React, {useLayoutEffect, useRef, useState} from 'react';
 import {View, Text, SafeAreaView, Pressable, FlatList} from 'react-native';
-import {Divider} from 'react-native-paper';
+import {Divider, IconButton} from 'react-native-paper';
 import {styles} from './styles';
 import {CONTANTS} from '../../helpers/api';
 import {StatusBar} from 'react-native';
@@ -18,7 +18,7 @@ export type Message = {
   timestamp: Date;
 };
 
-interface ErrorResponseMessage {
+interface ErrorResponseMessage extends Error {
   response: {data: {error: {message: string}}};
 }
 
@@ -26,10 +26,12 @@ const OpenAI = () => {
   const flatListRef = useRef<FlatList>(null);
   const toast = useToast();
   const [input, setInput] = useState('');
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const [prevContentVerticalOffset, setPrevContentVerticalOffset] = useState(0);
   const [sentMessagesAndResponses, setSentMessagesAndResponses] = useState<
     Message[]
   >([]);
-  const [base, setBase] = useState<any>(null);
+  const [base, setBase] = useState<string | null>(null);
 
   const {data, mutate, isLoading} = useMutation({
     mutationFn: ({messages, model}: sentDataModel) =>
@@ -42,22 +44,22 @@ const OpenAI = () => {
     },
     onError: (error: ErrorResponseMessage) => {
       toast.show(
-        (error as ErrorResponseMessage)?.response?.data?.error?.message,
+        error?.response?.data?.error?.message || error.message,
         CONTANTS.toastOptions,
       );
     },
   });
 
-  // there is another way to implement scroll to bottom
-  // by jusdt adding inverted to the flatlist
-  // and adding the data in reverse
-  // which one do u want
-
   useLayoutEffect(() => {
     if (flatListRef.current && data) {
       flatListRef.current.scrollToEnd();
+      setPrevContentVerticalOffset(contentVerticalOffset);
     }
   }, [data]);
+
+  const handleScrollToEnd = () => {
+    flatListRef.current?.scrollToEnd({animated: true});
+  };
 
   const handleSendMessage = () => {
     if (!input) return;
@@ -79,7 +81,7 @@ const OpenAI = () => {
   };
 
   const handleRegenerateResponse = () => {
-    setInput(base);
+    setInput(base!);
     setBase(input);
     handleSendMessage();
   };
@@ -90,6 +92,7 @@ const OpenAI = () => {
       {isLoading && Loading()}
       <FlatList
         ref={flatListRef}
+        onScroll={e => setContentVerticalOffset(e.nativeEvent.contentOffset.y)}
         data={sentMessagesAndResponses}
         keyExtractor={({timestamp}: Message) =>
           `${Math.random()}+${timestamp ? timestamp.getTime() : ''}`
@@ -99,6 +102,15 @@ const OpenAI = () => {
           <MessagesAndResponsesItem item={item} />
         )}
       />
+      {contentVerticalOffset < prevContentVerticalOffset && (
+        <View style={{width: '100%'}}>
+          <IconButton
+            onPress={handleScrollToEnd}
+            icon="arrow-down-drop-circle"
+            style={{width: '90%'}}
+          />
+        </View>
+      )}
       {sentMessagesAndResponses.length > 1 && !isLoading ? (
         <View style={{marginBottom: 80}}>
           {/* <Divider style={{height: 0.5}} /> */}

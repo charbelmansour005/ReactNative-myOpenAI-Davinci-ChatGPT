@@ -1,4 +1,3 @@
-import {StyleSheet} from 'react-native';
 import React from 'react';
 import OpenAI from './src/screens/openAI';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
@@ -19,5 +18,3 @@ const App = (props: Props) => {
 };
 
 export default App;
-
-const styles = StyleSheet.create({});

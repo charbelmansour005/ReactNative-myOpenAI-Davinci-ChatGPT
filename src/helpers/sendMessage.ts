@@ -21,8 +21,6 @@ interface Completion {
   choices: Choice[];
 }
 
-console.log(API_TOKEN);
-
 export interface sentDataModel {
   model: string;
   messages: {role: string; content: string}[];

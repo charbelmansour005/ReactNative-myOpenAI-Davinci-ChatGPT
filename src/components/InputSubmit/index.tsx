@@ -1,14 +1,14 @@
 import {View} from 'react-native';
 import {styles} from './styles';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {IconButton, TextInput} from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 
 type Props = {
   input: string;
   loading: boolean;
-  setInput: (args?: any) => void;
-  setBase: (args?: string) => void;
+  setInput: Dispatch<SetStateAction<string>>;
+  setBase: Dispatch<SetStateAction<string | null>>;
   handleSubmit: () => void;
 };
 
