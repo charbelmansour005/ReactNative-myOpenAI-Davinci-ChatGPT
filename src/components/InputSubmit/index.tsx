@@ -12,13 +12,7 @@ type Props = {
   handleSubmit: () => void;
 };
 
-const InputSubmit = ({
-  handleSubmit,
-  input,
-  loading,
-  setBase,
-  setInput,
-}: Props) => (
+const InputSubmit = ({...props}: Props) => (
   // below view gives us the chat look
   <View
     style={{
@@ -32,18 +26,18 @@ const InputSubmit = ({
     }}>
     <TextInput
       style={styles.input}
-      value={input}
-      onChangeText={text => setInput(text)}
+      value={props.input}
+      onChangeText={text => props.setInput(text)}
       mode="outlined"
       activeOutlineColor="gray"
       cursorColor={'white'}
       textColor="white"
       placeholderTextColor="gray"
       outlineColor="gray"
-      disabled={loading}
+      disabled={props.loading}
     />
     <>
-      {loading ? (
+      {props.loading ? (
         <LottieView
           speed={1}
           style={{height: 6, marginTop: '7%', marginLeft: '4.2%'}}
@@ -53,18 +47,18 @@ const InputSubmit = ({
         />
       ) : (
         <IconButton
-          icon={loading ? 'clock-time-eight-outline' : 'send'}
+          icon={props.loading ? 'clock-time-eight-outline' : 'send'}
           iconColor="white"
           containerColor="#40414f"
           size={24}
           borderless={true}
           onPress={() => {
-            setBase(input);
-            handleSubmit();
+            props.setBase(props.input);
+            props.handleSubmit();
           }}
           mode="contained"
           style={{marginTop: 10, marginRight: 3}}
-          disabled={loading || !input}
+          disabled={props.loading || !props.input}
         />
       )}
     </>

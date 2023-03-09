@@ -9,7 +9,7 @@ type Props = {
   setInput: (args?: any) => void;
 };
 
-const Examples = ({setInput}: Props) => {
+const Examples = ({...props}: Props) => {
   return (
     <View style={{flex: 1, marginBottom: '80%'}}>
       <View
@@ -35,7 +35,7 @@ const Examples = ({setInput}: Props) => {
           android_ripple={{
             color: 'white',
           }}
-          onPress={() => setInput(Suggestions.One)}>
+          onPress={() => props.setInput(Suggestions.One)}>
           <Text style={styles.example}>{Suggestions.One}</Text>
         </Pressable>
         <Pressable
@@ -43,7 +43,7 @@ const Examples = ({setInput}: Props) => {
           android_ripple={{
             color: 'white',
           }}
-          onPress={() => setInput(Suggestions.Two)}>
+          onPress={() => props.setInput(Suggestions.Two)}>
           <Text style={styles.example}>{Suggestions.Two}</Text>
         </Pressable>
       </Card>
