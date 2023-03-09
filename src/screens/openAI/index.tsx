@@ -38,18 +38,16 @@ const OpenAI = () => {
   const {data, mutate, isLoading} = useMutation({
     mutationFn: ({messages, model}: sentDataModel) =>
       sendMessage({messages, model}),
-    onSuccess: async response => {
+    onSuccess: async response =>
       setSentMessagesAndResponses(prevSentMessagesAndResponses => [
         ...prevSentMessagesAndResponses,
         response.choices[0].message,
-      ]);
-    },
-    onError: (error: ErrorResponseMessage) => {
+      ]),
+    onError: (error: ErrorResponseMessage) =>
       toast.show(
         error?.response?.data?.error?.message || error.message,
         CONTANTS.toastOptions,
-      );
-    },
+      ),
   });
 
   useLayoutEffect(() => {

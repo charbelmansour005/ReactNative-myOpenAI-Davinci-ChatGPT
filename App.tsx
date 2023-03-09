@@ -2,6 +2,7 @@ import React from 'react';
 import OpenAI from './src/screens/openAI';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import {ToastProvider} from 'react-native-toast-notifications';
+import AppNavigation from './src/navigation/AppNavigation';
 type Props = {};
 
 const queryClient = new QueryClient();
@@ -11,7 +12,7 @@ const App = (props: Props) => {
   return (
     <QueryClientProvider client={queryClient}>
       <ToastProvider>
-        <OpenAI />
+        <AppNavigation />
       </ToastProvider>
     </QueryClientProvider>
   );
