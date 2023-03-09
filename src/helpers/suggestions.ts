@@ -4,6 +4,6 @@ type Suggestions = {
 };
 
 export const Suggestions: Suggestions = {
-  One: `Explain quantum computing in simple terms`,
-  Two: `How do I make chocolate ice cream?`,
+  One: `"Explain quantum computing in simple terms"`,
+  Two: `"How do I make chocolate ice cream?"`,
 };

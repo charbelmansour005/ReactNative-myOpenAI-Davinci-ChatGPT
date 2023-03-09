@@ -20,18 +20,9 @@ const InputSubmit = ({
   setInput,
 }: Props) => (
   // below view gives us the chat look
-  <View
-    style={{
-      display: 'flex',
-      flexDirection: 'row',
-      position: 'absolute',
-      bottom: 0,
-      // backgroundColor: '#dbdbdb',
-      backgroundColor: '#343541',
-      padding: 10,
-    }}>
+  <View style={styles.inputSubmitWrapper}>
     <TextInput
-      style={styles.input}
+      style={{width: loading ? '86%' : '85.5%', ...styles.input}}
       value={input}
       onChangeText={text => setInput(text)}
       mode="outlined"
