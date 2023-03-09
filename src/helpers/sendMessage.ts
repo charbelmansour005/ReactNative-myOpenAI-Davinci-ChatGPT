@@ -1,6 +1,5 @@
 import axios from 'axios';
-// import {API_TOKEN} from '@env';
-const API_TOKEN = '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';
+import {API_TOKEN} from '@env';
 import {CONTANTS} from './api';
 import {Message} from '../screens/openAI';
 
@@ -21,6 +20,8 @@ interface Completion {
   };
   choices: Choice[];
 }
+
+console.log(API_TOKEN);
 
 export interface sentDataModel {
   model: string;

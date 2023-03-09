@@ -9,12 +9,14 @@ type Constants = {
   returnSecureToken: boolean;
   openAiModel: string;
   toastOptions: ToastOptions;
+  role: {user: string};
 };
 
 const firebaseAPIKey = 'AIzaSyCdO4EhlwTBUqEUR1KtsnxTX_B9BsR2X0o';
 const grant_type = 'refresh_token';
 
 export const CONTANTS: Constants = {
+  role: {user: 'user'},
   toastOptions: {
     placement: 'top',
     animationType: 'zoom-in',
@@ -22,8 +24,6 @@ export const CONTANTS: Constants = {
     type: 'danger',
   },
   openAiModel: 'gpt-3.5-turbo',
-  // use this sucka
-  // YD83EOnyB0X4qitl2LSsT3BlbkFJu3TT2bhIvhXYiMIfHbQZ
   myToken: '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',
   URL: 'https://api.openai.com/v1/chat/completions', // ChatGPT V1
   // URL: "https://api.openai.com/v1/engines/davinci/completions", // Completions Davinci

@@ -1,15 +1,7 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Pressable,
-  FlatList,
-  Image,
-} from 'react-native';
+import React, {useLayoutEffect, useRef, useState} from 'react';
+import {View, Text, SafeAreaView, Pressable, FlatList} from 'react-native';
 import {Divider} from 'react-native-paper';
 import {styles} from './styles';
-import Chat from '../../assets/chat.png';
 import {CONTANTS} from '../../helpers/api';
 import {StatusBar} from 'react-native';
 import {useToast} from 'react-native-toast-notifications';
@@ -17,6 +9,7 @@ import {useToast} from 'react-native-toast-notifications';
 import {Examples, InputSubmit, Loading} from '../../components';
 import {useMutation} from '@tanstack/react-query';
 import {sendMessage, sentDataModel} from '../../helpers/sendMessage';
+import MessagesAndResponsesItem from '../../components/OpenAi/MessagesAndResponsesItem';
 
 export type Message = {
   id: string;
@@ -30,6 +23,7 @@ interface ErrorResponseMessage {
 }
 
 const OpenAI = () => {
+  const flatListRef = useRef<FlatList>(null);
   const toast = useToast();
   const [input, setInput] = useState('');
   const [sentMessagesAndResponses, setSentMessagesAndResponses] = useState<
@@ -37,7 +31,7 @@ const OpenAI = () => {
   >([]);
   const [base, setBase] = useState<any>(null);
 
-  const {mutate, isLoading} = useMutation({
+  const {data, mutate, isLoading} = useMutation({
     mutationFn: ({messages, model}: sentDataModel) =>
       sendMessage({messages, model}),
     onSuccess: async response => {
@@ -54,11 +48,22 @@ const OpenAI = () => {
     },
   });
 
+  // there is another way to implement scroll to bottom
+  // by jusdt adding inverted to the flatlist
+  // and adding the data in reverse
+  // which one do u want
+
+  useLayoutEffect(() => {
+    if (flatListRef.current && data) {
+      flatListRef.current.scrollToEnd();
+    }
+  }, [data]);
+
   const handleSendMessage = () => {
     if (!input) return;
     const message = {
       id: new Date().toISOString(),
-      role: 'user',
+      role: CONTANTS.role.user,
       content: input,
       timestamp: new Date(), // add timestamp property
     };
@@ -68,7 +73,7 @@ const OpenAI = () => {
     ]);
     mutate({
       model: CONTANTS.openAiModel,
-      messages: [{content: input, role: 'user'}],
+      messages: [{content: input, role: CONTANTS.role.user}],
     });
     setInput('');
   };
@@ -84,38 +89,14 @@ const OpenAI = () => {
       <StatusBar backgroundColor={'#343541'} barStyle="light-content" />
       {isLoading && Loading()}
       <FlatList
+        ref={flatListRef}
         data={sentMessagesAndResponses}
-        keyExtractor={(item: Message) =>
-          `${Math.random()}+${item.timestamp ? item.timestamp.getTime() : ''}`
+        keyExtractor={({timestamp}: Message) =>
+          `${Math.random()}+${timestamp ? timestamp.getTime() : ''}`
         } // use timestamp property as part of the key
         showsVerticalScrollIndicator={false}
         renderItem={({item}: {item: Message}) => (
-          <View
-            style={{
-              backgroundColor: item.role === 'user' ? '#343541' : '#444654',
-              padding: 0,
-              borderRadius: 0,
-              margin: 0,
-              borderBottomColor: '#202123',
-              borderBottomWidth: 1,
-            }}>
-            <>
-              {item.role !== 'user' ? (
-                <Image source={Chat} style={styles.image} />
-              ) : null}
-            </>
-            <Text
-              style={{
-                color: item.role === 'user' ? '#fff' : '#fff',
-                marginLeft: '3%',
-                marginRight: '2%',
-                marginBottom: '4%',
-                paddingHorizontal: '2%',
-                marginTop: item.role === 'user' ? '4%' : '2%',
-              }}>
-              {item.content}
-            </Text>
-          </View>
+          <MessagesAndResponsesItem item={item} />
         )}
       />
       {sentMessagesAndResponses.length > 1 && !isLoading ? (
