@@ -1,18 +1,24 @@
 import {View} from 'react-native';
 import {styles} from './styles';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {IconButton, TextInput} from 'react-native-paper';
 import LottieView from 'lottie-react-native';
 
 type Props = {
   input: string;
   loading: boolean;
-  setInput: (args?: any) => void;
-  setBase: (args?: string) => void;
+  setInput: Dispatch<SetStateAction<string>>;
+  setBase: Dispatch<SetStateAction<string | null>>;
   handleSubmit: () => void;
 };
 
-const InputSubmit = ({...props}: Props) => (
+const InputSubmit = ({
+  handleSubmit,
+  input,
+  loading,
+  setBase,
+  setInput,
+}: Props) => (
   // below view gives us the chat look
   <View
     style={{
@@ -26,18 +32,18 @@ const InputSubmit = ({...props}: Props) => (
     }}>
     <TextInput
       style={styles.input}
-      value={props.input}
-      onChangeText={text => props.setInput(text)}
+      value={input}
+      onChangeText={text => setInput(text)}
       mode="outlined"
       activeOutlineColor="gray"
       cursorColor={'white'}
       textColor="white"
       placeholderTextColor="gray"
       outlineColor="gray"
-      disabled={props.loading}
+      disabled={loading}
     />
     <>
-      {props.loading ? (
+      {loading ? (
         <LottieView
           speed={1}
           style={{height: 6, marginTop: '7%', marginLeft: '4.2%'}}
@@ -47,18 +53,18 @@ const InputSubmit = ({...props}: Props) => (
         />
       ) : (
         <IconButton
-          icon={props.loading ? 'clock-time-eight-outline' : 'send'}
+          icon={loading ? 'clock-time-eight-outline' : 'send'}
           iconColor="white"
           containerColor="#40414f"
           size={24}
           borderless={true}
           onPress={() => {
-            props.setBase(props.input);
-            props.handleSubmit();
+            setBase(input);
+            handleSubmit();
           }}
           mode="contained"
           style={{marginTop: 10, marginRight: 3}}
-          disabled={props.loading || !props.input}
+          disabled={loading || !input}
         />
       )}
     </>

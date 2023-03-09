@@ -1,15 +1,15 @@
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {Dispatch, SetStateAction} from 'react';
 import {Card} from 'react-native-paper';
 import Chat from '../../assets/sun.png';
 import {Suggestions} from '../../helpers/suggestions';
 import {styles} from './styles';
 
 type Props = {
-  setInput: (args?: any) => void;
+  setInput: Dispatch<SetStateAction<string>>;
 };
 
-const Examples = ({...props}: Props) => {
+const Examples = ({setInput}: Props) => {
   return (
     <View style={{flex: 1, marginBottom: '80%'}}>
       <View
@@ -35,7 +35,7 @@ const Examples = ({...props}: Props) => {
           android_ripple={{
             color: 'white',
           }}
-          onPress={() => props.setInput(Suggestions.One)}>
+          onPress={() => setInput(Suggestions.One)}>
           <Text style={styles.example}>{Suggestions.One}</Text>
         </Pressable>
         <Pressable
@@ -43,7 +43,7 @@ const Examples = ({...props}: Props) => {
           android_ripple={{
             color: 'white',
           }}
-          onPress={() => props.setInput(Suggestions.Two)}>
+          onPress={() => setInput(Suggestions.Two)}>
           <Text style={styles.example}>{Suggestions.Two}</Text>
         </Pressable>
       </Card>

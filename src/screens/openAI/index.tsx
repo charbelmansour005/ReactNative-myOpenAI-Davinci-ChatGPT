@@ -1,15 +1,7 @@
-import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Pressable,
-  FlatList,
-  Image,
-} from 'react-native';
-import {Divider} from 'react-native-paper';
+import React, {useLayoutEffect, useRef, useState} from 'react';
+import {View, Text, SafeAreaView, Pressable, FlatList} from 'react-native';
+import {Divider, IconButton} from 'react-native-paper';
 import {styles} from './styles';
-import Chat from '../../assets/chat.png';
 import {CONTANTS} from '../../helpers/api';
 import {StatusBar} from 'react-native';
 import {useToast} from 'react-native-toast-notifications';
@@ -17,6 +9,7 @@ import {useToast} from 'react-native-toast-notifications';
 import {Examples, InputSubmit, Loading} from '../../components';
 import {useMutation} from '@tanstack/react-query';
 import {sendMessage, sentDataModel} from '../../helpers/sendMessage';
+import MessagesAndResponsesItem from '../../components/OpenAi/MessagesAndResponsesItem';
 
 export type Message = {
   id: string;
@@ -25,19 +18,22 @@ export type Message = {
   timestamp: Date;
 };
 
-interface ErrorResponseMessage {
+interface ErrorResponseMessage extends Error {
   response: {data: {error: {message: string}}};
 }
 
 const OpenAI = () => {
+  const flatListRef = useRef<FlatList>(null);
   const toast = useToast();
   const [input, setInput] = useState('');
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
+  const [prevContentVerticalOffset, setPrevContentVerticalOffset] = useState(0);
   const [sentMessagesAndResponses, setSentMessagesAndResponses] = useState<
     Message[]
   >([]);
-  const [base, setBase] = useState<any>(null);
+  const [base, setBase] = useState<string | null>(null);
 
-  const {mutate, isLoading} = useMutation({
+  const {data, mutate, isLoading} = useMutation({
     mutationFn: ({messages, model}: sentDataModel) =>
       sendMessage({messages, model}),
     onSuccess: async response => {
@@ -48,17 +44,28 @@ const OpenAI = () => {
     },
     onError: (error: ErrorResponseMessage) => {
       toast.show(
-        (error as ErrorResponseMessage)?.response?.data?.error?.message,
+        error?.response?.data?.error?.message || error.message,
         CONTANTS.toastOptions,
       );
     },
   });
 
+  useLayoutEffect(() => {
+    if (flatListRef.current && data) {
+      flatListRef.current.scrollToEnd();
+      setPrevContentVerticalOffset(contentVerticalOffset);
+    }
+  }, [data]);
+
+  const handleScrollToEnd = () => {
+    flatListRef.current?.scrollToEnd({animated: true});
+  };
+
   const handleSendMessage = () => {
     if (!input) return;
     const message = {
       id: new Date().toISOString(),
-      role: 'user',
+      role: CONTANTS.role.user,
       content: input,
       timestamp: new Date(), // add timestamp property
     };
@@ -68,13 +75,13 @@ const OpenAI = () => {
     ]);
     mutate({
       model: CONTANTS.openAiModel,
-      messages: [{content: input, role: 'user'}],
+      messages: [{content: input, role: CONTANTS.role.user}],
     });
     setInput('');
   };
 
   const handleRegenerateResponse = () => {
-    setInput(base);
+    setInput(base!);
     setBase(input);
     handleSendMessage();
   };
@@ -84,40 +91,26 @@ const OpenAI = () => {
       <StatusBar backgroundColor={'#343541'} barStyle="light-content" />
       {isLoading && Loading()}
       <FlatList
+        ref={flatListRef}
+        onScroll={e => setContentVerticalOffset(e.nativeEvent.contentOffset.y)}
         data={sentMessagesAndResponses}
-        keyExtractor={(item: Message) =>
-          `${Math.random()}+${item.timestamp ? item.timestamp.getTime() : ''}`
+        keyExtractor={({timestamp}: Message) =>
+          `${Math.random()}+${timestamp ? timestamp.getTime() : ''}`
         } // use timestamp property as part of the key
         showsVerticalScrollIndicator={false}
         renderItem={({item}: {item: Message}) => (
-          <View
-            style={{
-              backgroundColor: item.role === 'user' ? '#343541' : '#444654',
-              padding: 0,
-              borderRadius: 0,
-              margin: 0,
-              borderBottomColor: '#202123',
-              borderBottomWidth: 1,
-            }}>
-            <>
-              {item.role !== 'user' ? (
-                <Image source={Chat} style={styles.image} />
-              ) : null}
-            </>
-            <Text
-              style={{
-                color: item.role === 'user' ? '#fff' : '#fff',
-                marginLeft: '1%',
-                marginRight: '2%',
-                marginBottom: '4%',
-                paddingHorizontal: '2%',
-                marginTop: item.role === 'user' ? '4%' : '2%',
-              }}>
-              {item.content}
-            </Text>
-          </View>
+          <MessagesAndResponsesItem item={item} />
         )}
       />
+      {contentVerticalOffset < prevContentVerticalOffset && (
+        <View style={{width: '100%'}}>
+          <IconButton
+            onPress={handleScrollToEnd}
+            icon="arrow-down-drop-circle"
+            style={{width: '90%'}}
+          />
+        </View>
+      )}
       {sentMessagesAndResponses.length > 1 && !isLoading ? (
         <View style={{marginBottom: 80}}>
           {/* <Divider style={{height: 0.5}} /> */}
