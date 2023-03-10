@@ -1,7 +1,9 @@
 import axios from 'axios';
-import {API_TOKEN} from '@env';
+// import {API_TOKEN} from '@env';
 import {CONTANTS} from './api';
 import {Message} from '../screens/openAI';
+const API_TOKEN = 'sk-';
+// KLi4jhIw7McQSKdAcPfKT3BlbkFJFLniIGspi45iqskh0L2q
 
 interface Choice {
   message: Message;

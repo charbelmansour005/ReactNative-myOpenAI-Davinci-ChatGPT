@@ -1,9 +1,9 @@
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import AboutUs from '../../screens/Info';
 import ChatGPT from '../../screens/openAI';
+import Davinci from '../../screens/davinci';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Text} from 'react-native-paper';
-import Davinci from '../../screens/davinci/index';
 
 type DrawerNavigationParams = {
   ChatGPT: undefined;
@@ -32,7 +32,7 @@ export default function DrawerNavigator() {
               iconName = focused ? 'information-outline' : 'information';
               break;
             case 'Davinci':
-              iconName = focused ? 'book-check-outline' : 'book-check';
+              iconName = focused ? 'head-snowflake-outline' : 'head-snowflake';
               break;
           }
           return <Icon name={iconName} color={color} size={size} />;
@@ -41,13 +41,13 @@ export default function DrawerNavigator() {
           let children = '';
           switch (route.name) {
             case 'ChatGPT':
-              children = 'ChatGPT';
+              children = 'OpenAI ChatGPT engine';
               break;
             case 'AboutUs':
               children = 'About Us';
               break;
             case 'Davinci':
-              children = 'Davinci';
+              children = 'OpenAI Davinci engine';
               break;
             default:
               children = '';
@@ -72,7 +72,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen
         name="Davinci"
         component={Davinci}
-        options={{headerTitle: 'Davinci'}}
+        options={{headerTitle: ''}}
       />
     </Drawer.Navigator>
   );

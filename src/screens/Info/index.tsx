@@ -1,13 +1,64 @@
-import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Avatar, Card, Divider, List, Title} from 'react-native-paper';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import React, {useLayoutEffect} from 'react';
+import {Image, StyleSheet, View} from 'react-native';
+import Chat from '../../assets/chat.png';
+import {
+  Avatar,
+  Card,
+  Divider,
+  IconButton,
+  List,
+  Title,
+} from 'react-native-paper';
+import {RootParamList} from '../../navigation/AppNavigation';
 
-const AboutUs = () => {
+type MyScreenNavigationProp = DrawerNavigationProp<RootParamList>;
+
+interface MyScreenProps {
+  navigation: MyScreenNavigationProp;
+}
+
+const AboutUs = ({navigation}: MyScreenProps) => {
   const githubDescription = `charbelmansour005\ncraper16`;
   const emailDescription = `charbelmansour005@gmail.com\ngeorgio.saad@gmail.com`;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Home',
+      headerStyle: {
+        backgroundColor: '#343541',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'normal',
+        fontSize: 17,
+      },
+      headerLeft: () => (
+        <IconButton
+          icon={'menu'}
+          onPress={() => navigation.toggleDrawer()}
+          containerColor="#343541"
+          iconColor="white"
+        />
+      ),
+      headerShadowVisible: false,
+      headerRight: () => (
+        <Image
+          source={Chat}
+          style={{
+            height: 25,
+            width: 25,
+            marginBottom: 0,
+            borderRadius: 2,
+            marginRight: '5%',
+          }}
+        />
+      ),
+    });
+  });
   return (
     <View style={{height: '100%', width: '100%', backgroundColor: '#343541'}}>
-      <Card style={styles.card}>
+      <Card mode="contained" style={styles.card}>
         <Card.Content>
           <Title style={{color: 'white'}}>About Us</Title>
           <Divider style={styles.divider} />

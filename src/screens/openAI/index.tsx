@@ -1,8 +1,17 @@
 import React, {useLayoutEffect, useRef, useState} from 'react';
-import {View, Text, SafeAreaView, Pressable, FlatList} from 'react-native';
+import {
+  View,
+  Text,
+  SafeAreaView,
+  Pressable,
+  FlatList,
+  Image,
+} from 'react-native';
 import {IconButton} from 'react-native-paper';
 import {styles} from './styles';
-import {CONTANTS} from '../../helpers/api';
+import {CONTANTS} from '../../services/api';
+import Chat from '../../assets/chat.png';
+import ChatCustom from '../../assets/chatcustom.png';
 import {StatusBar} from 'react-native';
 import {useToast} from 'react-native-toast-notifications';
 import {
@@ -11,7 +20,10 @@ import {
   MessagesAndResponsesItem,
 } from '../../components';
 import {useMutation} from '@tanstack/react-query';
-import {sendMessage, sentDataModel} from '../../helpers/sendMessage';
+import {sendMessage, sentDataModel} from '../../services/sendMessage';
+import {DrawerNavigationProp} from '@react-navigation/drawer';
+import {RootParamList} from '../../navigation/AppNavigation';
+import LottieView from 'lottie-react-native';
 
 export type Message = {
   id: string;
@@ -24,7 +36,13 @@ interface ErrorResponseMessage extends Error {
   response: {data: {error: {message: string}}};
 }
 
-const OpenAI = () => {
+type MyScreenNavigationProp = DrawerNavigationProp<RootParamList>;
+
+interface MyScreenProps {
+  navigation: MyScreenNavigationProp;
+}
+
+const OpenAI = ({navigation}: MyScreenProps) => {
   const flatListRef = useRef<FlatList>(null);
   const toast = useToast();
   const [input, setInput] = useState('');
@@ -48,6 +66,41 @@ const OpenAI = () => {
         error?.response?.data?.error?.message || error.message,
         CONTANTS.toastOptions,
       ),
+  });
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: 'Home',
+      headerStyle: {
+        backgroundColor: '#343541',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'normal',
+        fontSize: 17,
+      },
+      headerLeft: () => (
+        <IconButton
+          icon={'menu'}
+          onPress={() => navigation.toggleDrawer()}
+          containerColor="#343541"
+          iconColor="white"
+        />
+      ),
+      headerShadowVisible: false,
+      headerRight: () => (
+        <Image
+          source={Chat}
+          style={{
+            height: 25,
+            width: 25,
+            marginBottom: 0,
+            borderRadius: 2,
+            marginRight: '5%',
+          }}
+        />
+      ),
+    });
   });
 
   useLayoutEffect(() => {
@@ -85,6 +138,20 @@ const OpenAI = () => {
     setBase(input);
     handleSendMessage();
   };
+
+  const showLoader = () => (
+    <View style={styles.center}>
+      <LottieView
+        speed={5.5}
+        style={styles.animation}
+        source={{
+          uri: 'https://assets10.lottiefiles.com/packages/lf20_rwq6ciql.json',
+        }}
+        autoPlay={true}
+        loop={true}
+      />
+    </View>
+  );
 
   return (
     <SafeAreaView style={styles.container}>
@@ -130,6 +197,7 @@ const OpenAI = () => {
           <MessagesAndResponsesItem item={item} />
         )}
       />
+      {isLoading && showLoader()}
       {contentVerticalOffset < prevContentVerticalOffset &&
         sentMessagesAndResponses.length !== 0 && (
           <View style={styles.scrollToEndWrapper}>

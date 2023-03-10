@@ -2,7 +2,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import DrawerNavigator from './drawer/DrawerNavigation';
 
-type RootParamList = {
+export type RootParamList = {
   Drawer: undefined;
 };
 

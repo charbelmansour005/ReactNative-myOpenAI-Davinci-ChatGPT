@@ -46,6 +46,12 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  center: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: '10%',
+  },
+  animation: {width: '100%', height: 50, aspectRatio: 0.5},
   container: {
     flex: 1,
     alignItems: 'center',

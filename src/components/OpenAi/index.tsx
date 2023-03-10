@@ -1,6 +1,6 @@
 import React from 'react';
 import {View, Image, Text} from 'react-native';
-import {CONTANTS} from '../../helpers/api';
+import {CONTANTS} from '../../services/api';
 import {Message} from '../../screens/openAI';
 import Chat from '../../assets/chat.png';
 import {styles} from './styles';
