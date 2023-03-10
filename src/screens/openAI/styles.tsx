@@ -49,9 +49,10 @@ export const styles = StyleSheet.create({
   center: {
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: '10%',
+    marginBottom: '20%',
+    width: '100%',
   },
-  animation: {width: '100%', height: 50, aspectRatio: 0.5},
+  animation: {width: '100%', height: 40, aspectRatio: 0.5},
   container: {
     flex: 1,
     alignItems: 'center',
@@ -77,5 +78,18 @@ export const styles = StyleSheet.create({
     color: 'black',
     padding: 2,
     textAlign: 'center',
+  },
+  textWrapper: {
+    padding: 0,
+    borderRadius: 0,
+    margin: 0,
+    borderBottomColor: '#202123',
+    borderBottomWidth: 1,
+  },
+  botUserText: {
+    marginLeft: '1%',
+    marginRight: '2%',
+    marginBottom: '4%',
+    paddingHorizontal: '2%',
   },
 });

@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     position: 'absolute',
     bottom: 0,
-    backgroundColor: '#343541',
+    // backgroundColor: '#343541',
     padding: 10,
     width: '100%',
   },

@@ -11,14 +11,8 @@ type Props = {
 
 const Examples = ({setInput}: Props) => {
   return (
-    <View style={{height: '100%', width: '50%', marginTop: '50%'}}>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
+    <View style={styles.exampleWrapper}>
+      <View style={styles.sonWrapper}>
         <Image source={Chat} style={styles.image} />
         <Text
           style={{
@@ -28,24 +22,18 @@ const Examples = ({setInput}: Props) => {
           Examples
         </Text>
       </View>
-
       <Card mode="outlined" style={styles.card}>
-        <Pressable
-          style={styles.pressable}
-          android_ripple={{
-            color: 'white',
-          }}
-          onPress={() => setInput(Suggestions.One)}>
-          <Text style={styles.example}>{Suggestions.One}</Text>
-        </Pressable>
-        <Pressable
-          style={styles.pressable}
-          android_ripple={{
-            color: 'white',
-          }}
-          onPress={() => setInput(Suggestions.Two)}>
-          <Text style={styles.example}>{Suggestions.Two}</Text>
-        </Pressable>
+        {Suggestions.map(suggestion => (
+          <Pressable
+            key={suggestion.key}
+            style={styles.pressable}
+            android_ripple={{
+              color: 'white',
+            }}
+            onPress={() => setInput(suggestion.value)}>
+            <Text style={styles.example}>{suggestion.value}</Text>
+          </Pressable>
+        ))}
       </Card>
     </View>
   );

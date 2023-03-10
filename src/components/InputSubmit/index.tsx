@@ -3,6 +3,7 @@ import {styles} from './styles';
 import React, {Dispatch, SetStateAction} from 'react';
 import {IconButton, TextInput} from 'react-native-paper';
 import LottieView from 'lottie-react-native';
+import LinearGradient from 'react-native-linear-gradient';
 
 type Props = {
   input: string;
@@ -20,7 +21,10 @@ const InputSubmit = ({
   setInput,
 }: Props) => (
   // below view gives us the chat look
-  <View style={styles.inputSubmitWrapper}>
+  // <View style={styles.inputSubmitWrapper}>
+  <LinearGradient
+    colors={['#40414f', '#40414f', '#343541', '#343541']}
+    style={styles.inputSubmitWrapper}>
     <TextInput
       style={{width: loading ? '86%' : '85.5%', ...styles.input}}
       value={input}
@@ -59,7 +63,8 @@ const InputSubmit = ({
         />
       )}
     </>
-  </View>
+  </LinearGradient>
+  // </View>
 );
 
 export default InputSubmit;

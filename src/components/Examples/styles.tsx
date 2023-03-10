@@ -23,12 +23,18 @@ export const styles = StyleSheet.create({
   },
   response: {
     color: '#fff',
-    marginBottom: '5%',
-    padding: 15,
+    marginBottom: '10%',
   },
   example: {
     color: '#fff',
     padding: 2,
     textAlign: 'center',
+  },
+  exampleWrapper: {height: '100%', width: '80%', marginTop: '10%'},
+  sonWrapper: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

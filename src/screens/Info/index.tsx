@@ -1,7 +1,6 @@
 import {DrawerNavigationProp} from '@react-navigation/drawer';
 import React, {useLayoutEffect} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
-import Chat from '../../assets/chat.png';
+import {StyleSheet, View} from 'react-native';
 import {
   Avatar,
   Card,
@@ -18,10 +17,12 @@ interface MyScreenProps {
   navigation: MyScreenNavigationProp;
 }
 
-const AboutUs = ({navigation}: MyScreenProps) => {
-  const githubDescription = `charbelmansour005\ncraper16`;
-  const emailDescription = `charbelmansour005@gmail.com\ngeorgio.saad@gmail.com`;
+const descriptions = {
+  githubDescription: `charbelmansour005\ncraper16`,
+  emailDescription: `charbelmansour005@gmail.com\ngeorgio.saad@gmail.com`,
+};
 
+const AboutUs = ({navigation}: MyScreenProps) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'Home',
@@ -35,30 +36,18 @@ const AboutUs = ({navigation}: MyScreenProps) => {
       },
       headerLeft: () => (
         <IconButton
-          icon={'menu'}
+          icon={'menu-right-outline'}
           onPress={() => navigation.toggleDrawer()}
           containerColor="#343541"
           iconColor="white"
         />
       ),
       headerShadowVisible: false,
-      headerRight: () => (
-        <Image
-          source={Chat}
-          style={{
-            height: 25,
-            width: 25,
-            marginBottom: 0,
-            borderRadius: 2,
-            marginRight: '5%',
-          }}
-        />
-      ),
     });
   });
   return (
     <View style={{height: '100%', width: '100%', backgroundColor: '#343541'}}>
-      <Card mode="contained" style={styles.card}>
+      <Card mode="outlined" style={styles.card}>
         <Card.Content>
           <Title style={{color: 'white'}}>About Us</Title>
           <Divider style={styles.divider} />
@@ -67,7 +56,7 @@ const AboutUs = ({navigation}: MyScreenProps) => {
             title="Charbel Mansour"
             titleStyle={{color: 'white'}}
             descriptionStyle={{color: 'silver'}}
-            description="Software Engineer"
+            description="Software Developer"
             left={() => (
               <Avatar.Image
                 size={40}
@@ -97,7 +86,7 @@ const AboutUs = ({navigation}: MyScreenProps) => {
             title="Github"
             titleStyle={{color: 'white'}}
             descriptionStyle={{color: 'silver'}}
-            description={githubDescription}
+            description={descriptions.githubDescription}
             left={() => <List.Icon icon="github" color="white" />}
           />
 
@@ -105,7 +94,7 @@ const AboutUs = ({navigation}: MyScreenProps) => {
             title="Email"
             titleStyle={{color: 'white'}}
             descriptionStyle={{color: 'silver'}}
-            description={emailDescription}
+            description={descriptions.emailDescription}
             left={() => <List.Icon icon="email" color="white" />}
           />
         </Card.Content>

@@ -11,7 +11,6 @@ import {IconButton} from 'react-native-paper';
 import {styles} from './styles';
 import {CONTANTS} from '../../services/api';
 import Chat from '../../assets/chat.png';
-import ChatCustom from '../../assets/chatcustom.png';
 import {StatusBar} from 'react-native';
 import {useToast} from 'react-native-toast-notifications';
 import {
@@ -81,7 +80,7 @@ const OpenAI = ({navigation}: MyScreenProps) => {
       },
       headerLeft: () => (
         <IconButton
-          icon={'menu'}
+          icon={'menu-right-outline'}
           onPress={() => navigation.toggleDrawer()}
           containerColor="#343541"
           iconColor="white"
@@ -144,9 +143,7 @@ const OpenAI = ({navigation}: MyScreenProps) => {
       <LottieView
         speed={5.5}
         style={styles.animation}
-        source={{
-          uri: 'https://assets10.lottiefiles.com/packages/lf20_rwq6ciql.json',
-        }}
+        source={require('../../assets/json/customLoader.json')}
         autoPlay={true}
         loop={true}
       />
@@ -198,6 +195,7 @@ const OpenAI = ({navigation}: MyScreenProps) => {
         )}
       />
       {isLoading && showLoader()}
+
       {contentVerticalOffset < prevContentVerticalOffset &&
         sentMessagesAndResponses.length !== 0 && (
           <View style={styles.scrollToEndWrapper}>

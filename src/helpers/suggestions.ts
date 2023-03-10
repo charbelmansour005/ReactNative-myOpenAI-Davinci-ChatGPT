@@ -1,9 +1,4 @@
-type Suggestions = {
-  One: string;
-  Two: string;
-};
-
-export const Suggestions: Suggestions = {
-  One: `Explain quantum computing in simple terms`,
-  Two: `How do I make chocolate ice cream?`,
-};
+export const Suggestions: {[key: string]: string}[] = [
+  {key: 'One', value: 'Explain quantum computing in simple terms'},
+  {key: 'Two', value: 'How do I make chocolate ice cream?'},
+];

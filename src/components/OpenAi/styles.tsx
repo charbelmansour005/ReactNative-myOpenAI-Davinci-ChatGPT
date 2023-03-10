@@ -23,4 +23,12 @@ export const styles = StyleSheet.create({
     marginBottom: '4%',
     paddingHorizontal: '2%',
   },
+  codeText: {
+    fontFamily: 'monospace',
+    backgroundColor: 'black',
+    padding: 0,
+    marginTop: '5%',
+    fontSize: 13,
+    color: 'magenta',
+  },
 });
