@@ -72,7 +72,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen
         name="Davinci"
         component={Davinci}
-        options={{headerTitle: ''}}
+        options={{headerTitle: 'Davinci'}}
       />
     </Drawer.Navigator>
   );

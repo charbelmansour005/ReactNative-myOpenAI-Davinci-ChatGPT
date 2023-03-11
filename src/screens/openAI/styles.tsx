@@ -51,8 +51,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: '20%',
     width: '100%',
+    backgroundColor: '#40414f',
   },
-  animation: {width: '100%', height: 40, aspectRatio: 0.5},
+  animation: {width: '100%', height: 35, aspectRatio: 0.5},
   container: {
     flex: 1,
     alignItems: 'center',

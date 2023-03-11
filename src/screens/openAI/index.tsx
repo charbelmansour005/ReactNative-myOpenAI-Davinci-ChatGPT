@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Pressable,
   FlatList,
+  Animated, // add Animated
   Image,
 } from 'react-native';
 import {IconButton} from 'react-native-paper';
@@ -42,6 +43,7 @@ interface MyScreenProps {
 }
 
 const OpenAI = ({navigation}: MyScreenProps) => {
+  // const scrollY = useRef(new Animated.Value(0)).current;
   const flatListRef = useRef<FlatList>(null);
   const toast = useToast();
   const [input, setInput] = useState('');
@@ -72,6 +74,17 @@ const OpenAI = ({navigation}: MyScreenProps) => {
       title: 'Home',
       headerStyle: {
         backgroundColor: '#343541',
+        // add height and opacity styles based on scrollY value
+        // height: scrollY.interpolate({
+        //   inputRange: [0, 45], // adjust the input range as needed
+        //   outputRange: [0, -45],
+        //   extrapolate: 'clamp',
+        // }),
+        // opacity: scrollY.interpolate({
+        //   inputRange: [50, 50],
+        //   outputRange: [0, 1],
+        //   extrapolate: 'clamp',
+        // }),
       },
       headerTintColor: '#fff',
       headerTitleStyle: {
@@ -102,12 +115,12 @@ const OpenAI = ({navigation}: MyScreenProps) => {
     });
   });
 
-  useLayoutEffect(() => {
-    if (flatListRef.current && data) {
-      flatListRef.current.scrollToEnd();
-      setPrevContentVerticalOffset(contentVerticalOffset);
-    }
-  }, [data]);
+  // useLayoutEffect(() => {
+  //   if (flatListRef.current && data) {
+  //     flatListRef.current.scrollToEnd();
+  //     setPrevContentVerticalOffset(contentVerticalOffset);
+  //   }
+  // }, [data]);
 
   const handleScrollToEnd = () => {
     flatListRef.current?.scrollToEnd({animated: true});
@@ -151,11 +164,19 @@ const OpenAI = ({navigation}: MyScreenProps) => {
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={{
+        ...styles.container,
+      }}>
       <StatusBar backgroundColor={'#343541'} barStyle="light-content" />
-      <FlatList
+      <Animated.FlatList
         ref={flatListRef}
         onScroll={e => setContentVerticalOffset(e.nativeEvent.contentOffset.y)}
+        // onScroll={Animated.event(
+        //   [{nativeEvent: {contentOffset: {y: scrollY}}}],
+        //   {useNativeDriver: false},
+        // )}
+        overScrollMode={'never'}
         data={sentMessagesAndResponses}
         keyExtractor={({timestamp}: Message) =>
           `${Math.random()}+${timestamp ? timestamp.getTime() : ''}`
