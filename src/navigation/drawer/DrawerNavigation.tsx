@@ -1,79 +1,82 @@
-import {createDrawerNavigator} from '@react-navigation/drawer';
-import AboutUs from '../../screens/Info';
-import ChatGPT from '../../screens/openAI';
-import Davinci from '../../screens/davinci';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {Text} from 'react-native-paper';
+import { createDrawerNavigator } from "@react-navigation/drawer"
+import AboutUs from "../../screens/Info"
+import ChatGPT from "../../screens/openAI"
+import Davinci from "../../screens/davinci"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { Text } from "react-native-paper"
 
 type DrawerNavigationParams = {
-  ChatGPT: undefined;
-  AboutUs: undefined;
-  Davinci: undefined;
-};
+  ChatGPT: undefined
+  AboutUs: undefined
+  Davinci: undefined
+}
 
-const Drawer = createDrawerNavigator<DrawerNavigationParams>();
+const Drawer = createDrawerNavigator<DrawerNavigationParams>()
 
 export default function DrawerNavigator() {
   return (
     <Drawer.Navigator
       initialRouteName="ChatGPT"
-      screenOptions={({route}) => ({
-        headerTintColor: 'white',
-        headerStyle: {backgroundColor: '#343541'},
-        drawerStyle: {backgroundColor: '#343541'},
-        drawerIcon: ({color, focused, size}) => {
-          let iconName = '';
+      screenOptions={({ route }) => ({
+        headerTintColor: "white",
+        headerStyle: { backgroundColor: "#343541" },
+        drawerStyle: { backgroundColor: "#343541" },
+        drawerIcon: ({ color, focused, size }) => {
+          let iconName = ""
 
           switch (route.name) {
-            case 'ChatGPT':
-              iconName = focused ? 'head-snowflake-outline' : 'head-snowflake';
-              break;
-            case 'AboutUs':
-              iconName = focused ? 'information-outline' : 'information';
-              break;
-            case 'Davinci':
-              iconName = focused ? 'head-snowflake-outline' : 'head-snowflake';
-              break;
+            case "ChatGPT":
+              iconName = focused ? "head-snowflake-outline" : "head-snowflake"
+              break
+            case "AboutUs":
+              iconName = focused ? "information-outline" : "information"
+              break
+            case "Davinci":
+              iconName = focused ? "head-snowflake-outline" : "head-snowflake"
+              break
           }
-          return <Icon name={iconName} color={color} size={size} />;
+          return <Icon name={iconName} color={color} size={size} />
         },
-        drawerLabel: ({color, focused}) => {
-          let children = '';
+        drawerLabel: ({ color, focused }) => {
+          let children = ""
           switch (route.name) {
-            case 'ChatGPT':
-              children = 'OpenAI ChatGPT engine';
-              break;
-            case 'AboutUs':
-              children = 'About Us';
-              break;
-            case 'Davinci':
-              children = 'OpenAI Davinci engine';
-              break;
+            case "ChatGPT":
+              children = "ChatGPT"
+              break
+            case "AboutUs":
+              children = "About"
+              break
+            case "Davinci":
+              children = "Davinci"
+              break
             default:
-              children = '';
+              children = ""
           }
           return (
-            <Text style={{color: focused ? 'white' : 'gray'}}>{children}</Text>
-          );
+            <Text style={{ color: focused ? "white" : "gray" }}>
+              {children}
+            </Text>
+          )
         },
-      })}>
+      })}
+    >
       <Drawer.Screen
         name="ChatGPT"
         component={ChatGPT}
-        options={{headerTitle: 'ChatGPT'}}
-      />
-
-      <Drawer.Screen
-        name="AboutUs"
-        component={AboutUs}
-        options={{headerTitle: ''}}
+        options={{ headerTitle: "ChatGPT" }}
       />
 
       <Drawer.Screen
         name="Davinci"
         component={Davinci}
-        options={{headerTitle: 'Davinci'}}
+        options={{ headerTitle: "Davinci" }}
+      />
+
+      <Drawer.Screen
+        name="AboutUs"
+        component={AboutUs}
+        options={{ headerTitle: "About" }}
       />
     </Drawer.Navigator>
-  );
+  )
 }

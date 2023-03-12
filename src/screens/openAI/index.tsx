@@ -1,99 +1,68 @@
-import React, {useLayoutEffect, useRef, useState} from 'react';
+import React, { useLayoutEffect, useRef, useState } from "react"
 import {
   View,
   Text,
   SafeAreaView,
   Pressable,
   FlatList,
-  Animated, // add Animated
   Image,
-} from 'react-native';
-import {IconButton} from 'react-native-paper';
-import {styles} from './styles';
-import {CONTANTS} from '../../services/api';
-import Chat from '../../assets/chat.png';
-import {StatusBar} from 'react-native';
-import {useToast} from 'react-native-toast-notifications';
+} from "react-native"
+import { IconButton } from "react-native-paper"
+import { styles } from "./styles"
+import { CONTANTS } from "../../services/api"
+import Chat from "../../assets/chat.png"
+import { StatusBar } from "react-native"
+import { useToast } from "react-native-toast-notifications"
 import {
   Examples,
   InputSubmit,
   MessagesAndResponsesItem,
-} from '../../components';
-import {useMutation} from '@tanstack/react-query';
-import {sendMessage, sentDataModel} from '../../services/sendMessage';
-import {DrawerNavigationProp} from '@react-navigation/drawer';
-import {RootParamList} from '../../navigation/AppNavigation';
-import LottieView from 'lottie-react-native';
+} from "../../components"
+import { useMutation } from "@tanstack/react-query"
+import { sendMessage, sentDataModel } from "../../services/sendMessage"
+import LottieView from "lottie-react-native"
+import { Message, MyScreenProps, ErrorResponseMessage } from "./types"
 
-export type Message = {
-  id: string;
-  role: string;
-  content: string;
-  timestamp: Date;
-};
-
-interface ErrorResponseMessage extends Error {
-  response: {data: {error: {message: string}}};
-}
-
-type MyScreenNavigationProp = DrawerNavigationProp<RootParamList>;
-
-interface MyScreenProps {
-  navigation: MyScreenNavigationProp;
-}
-
-const OpenAI = ({navigation}: MyScreenProps) => {
-  // const scrollY = useRef(new Animated.Value(0)).current;
-  const flatListRef = useRef<FlatList>(null);
-  const toast = useToast();
-  const [input, setInput] = useState('');
-  const [contentVerticalOffset, setContentVerticalOffset] = useState(0);
-  const [prevContentVerticalOffset, setPrevContentVerticalOffset] = useState(0);
+const OpenAI = ({ navigation }: MyScreenProps) => {
+  const flatListRef = useRef<FlatList>(null)
+  const toast = useToast()
+  const [input, setInput] = useState("")
+  const [contentVerticalOffset, setContentVerticalOffset] = useState(0)
+  const [prevContentVerticalOffset, setPrevContentVerticalOffset] = useState(0)
   const [sentMessagesAndResponses, setSentMessagesAndResponses] = useState<
     Message[]
-  >([]);
-  const [base, setBase] = useState<string | null>(null);
+  >([])
+  const [base, setBase] = useState<string | null>(null)
 
-  const {data, mutate, isLoading} = useMutation({
-    mutationFn: ({messages, model}: sentDataModel) =>
-      sendMessage({messages, model}),
-    onSuccess: async response =>
-      setSentMessagesAndResponses(prevSentMessagesAndResponses => [
+  const { data, mutate, isLoading } = useMutation({
+    mutationFn: ({ messages, model }: sentDataModel) =>
+      sendMessage({ messages, model }),
+    onSuccess: async (response) =>
+      setSentMessagesAndResponses((prevSentMessagesAndResponses) => [
         ...prevSentMessagesAndResponses,
         response.choices[0].message,
       ]),
     onError: (error: ErrorResponseMessage) =>
       toast.show(
         error?.response?.data?.error?.message || error.message,
-        CONTANTS.toastOptions,
+        CONTANTS.toastOptions
       ),
-  });
+  })
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: 'Home',
+      title: "Home",
       headerStyle: {
-        backgroundColor: '#343541',
-        // add height and opacity styles based on scrollY value
-        // height: scrollY.interpolate({
-        //   inputRange: [0, 45], // adjust the input range as needed
-        //   outputRange: [0, -45],
-        //   extrapolate: 'clamp',
-        // }),
-        // opacity: scrollY.interpolate({
-        //   inputRange: [50, 50],
-        //   outputRange: [0, 1],
-        //   extrapolate: 'clamp',
-        // }),
+        backgroundColor: "#343541",
       },
-      headerTintColor: '#fff',
+      headerTintColor: "#fff",
       headerTitleStyle: {
-        fontWeight: 'normal',
+        fontWeight: "normal",
         fontSize: 17,
       },
       headerLeft: () => (
         <IconButton
-          icon={'menu-right-outline'}
+          icon={"menu-right-outline"}
           onPress={() => navigation.toggleDrawer()}
           containerColor="#343541"
           iconColor="white"
@@ -108,78 +77,78 @@ const OpenAI = ({navigation}: MyScreenProps) => {
             width: 25,
             marginBottom: 0,
             borderRadius: 2,
-            marginRight: '5%',
+            marginRight: "5%",
           }}
         />
       ),
-    });
-  });
+    })
+  })
 
-  // useLayoutEffect(() => {
-  //   if (flatListRef.current && data) {
-  //     flatListRef.current.scrollToEnd();
-  //     setPrevContentVerticalOffset(contentVerticalOffset);
-  //   }
-  // }, [data]);
+  useLayoutEffect(() => {
+    if (flatListRef.current && data) {
+      flatListRef.current.scrollToEnd()
+      setPrevContentVerticalOffset(contentVerticalOffset)
+    }
+  }, [data])
 
   const handleScrollToEnd = () => {
-    flatListRef.current?.scrollToEnd({animated: true});
-  };
+    flatListRef.current?.scrollToEnd({ animated: true })
+  }
 
   const handleSendMessage = () => {
-    if (!input) return;
+    if (!input) return
     const message = {
       id: new Date().toISOString(),
       role: CONTANTS.role.user,
       content: input,
       timestamp: new Date(), // add timestamp property
-    };
-    setSentMessagesAndResponses(prevSentMessagesAndResponses => [
+    }
+    setSentMessagesAndResponses((prevSentMessagesAndResponses) => [
       ...prevSentMessagesAndResponses,
       message,
-    ]);
+    ])
     mutate({
       model: CONTANTS.openAiModel,
-      messages: [{content: input, role: CONTANTS.role.user}],
-    });
-    setInput('');
-  };
+      messages: [{ content: input, role: CONTANTS.role.user }],
+    })
+    setInput("")
+  }
 
   const handleRegenerateResponse = () => {
-    setInput(base!);
-    setBase(input);
-    handleSendMessage();
-  };
+    setInput(base!)
+    setBase(input)
+    handleSendMessage()
+  }
 
   const showLoader = () => (
     <View style={styles.center}>
       <LottieView
         speed={5.5}
         style={styles.animation}
-        source={require('../../assets/json/customLoader.json')}
+        source={require("../../assets/json/customLoader.json")}
         autoPlay={true}
         loop={true}
       />
     </View>
-  );
+  )
 
   return (
     <SafeAreaView
       style={{
         ...styles.container,
-      }}>
-      <StatusBar backgroundColor={'#343541'} barStyle="light-content" />
-      <Animated.FlatList
+      }}
+    >
+      <StatusBar backgroundColor={"#343541"} barStyle="light-content" />
+
+      <FlatList
         ref={flatListRef}
-        onScroll={e => setContentVerticalOffset(e.nativeEvent.contentOffset.y)}
-        // onScroll={Animated.event(
-        //   [{nativeEvent: {contentOffset: {y: scrollY}}}],
-        //   {useNativeDriver: false},
-        // )}
-        overScrollMode={'never'}
+        onScroll={(e) =>
+          setContentVerticalOffset(e.nativeEvent.contentOffset.y)
+        }
+        overScrollMode={"never"}
         data={sentMessagesAndResponses}
-        keyExtractor={({timestamp}: Message) =>
-          `${Math.random()}+${timestamp ? timestamp.getTime() : ''}`
+        keyExtractor={({ timestamp }: Message) =>
+          `${Math.random()}+${timestamp ? timestamp.getTime() : ""}`
         }
         showsVerticalScrollIndicator={false}
         ListFooterComponent={
@@ -189,29 +158,36 @@ const OpenAI = ({navigation}: MyScreenProps) => {
                 <Pressable
                   disabled={isLoading}
                   style={styles.clearBtn}
-                  android_ripple={{color: 'white'}}
+                  android_ripple={{
+                    color: "white",
+                    borderless: true,
+                    radius: 25,
+                    foreground: false,
+                  }}
                   onPress={() => {
-                    setSentMessagesAndResponses([]);
-                  }}>
-                  <Text style={{color: 'white'}}>Clear</Text>
+                    setSentMessagesAndResponses([])
+                  }}
+                >
+                  <Text style={{ color: "white" }}>Clear</Text>
                 </Pressable>
                 <Pressable
                   disabled={isLoading}
                   style={styles.regenRespBtn}
                   android_ripple={{
-                    color: 'white',
+                    color: "white",
                     borderless: true,
                     radius: 25,
                     foreground: false,
                   }}
-                  onPress={handleRegenerateResponse}>
-                  <Text style={{color: 'white'}}>Regenerate response</Text>
+                  onPress={handleRegenerateResponse}
+                >
+                  <Text style={{ color: "white" }}>Regenerate response</Text>
                 </Pressable>
               </View>
             ) : null}
           </>
         }
-        renderItem={({item}: {item: Message}) => (
+        renderItem={({ item }: { item: Message }) => (
           <MessagesAndResponsesItem item={item} />
         )}
       />
@@ -224,16 +200,17 @@ const OpenAI = ({navigation}: MyScreenProps) => {
               onPress={handleScrollToEnd}
               icon="arrow-down-drop-circle"
               iconColor="silver"
-              style={{width: '95%'}}
+              style={{ width: "95%" }}
             />
           </View>
         )}
       {sentMessagesAndResponses.length > 1 && !isLoading ? (
-        <View style={{marginBottom: 80}}></View>
+        <View style={{ marginBottom: 80 }}></View>
       ) : null}
       {sentMessagesAndResponses.length === 0 && !isLoading && (
         <Examples setInput={setInput} />
       )}
+
       <InputSubmit
         input={input}
         setInput={setInput}
@@ -242,7 +219,7 @@ const OpenAI = ({navigation}: MyScreenProps) => {
         handleSubmit={handleSendMessage}
       />
     </SafeAreaView>
-  );
-};
+  )
+}
 
-export default OpenAI;
+export default OpenAI
