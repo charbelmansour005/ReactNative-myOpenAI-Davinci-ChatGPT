@@ -1,9 +1,5 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="UTF-8">
-	<title>OpenAI ChatGPT Mobile App</title>
-</head>
 <body>
 	<h1>OpenAI ChatGPT Mobile App</h1>
 	<p>This project is a reimagined mobile version of the ChatGPT AI chatbot, powered by the OpenAI GPT engine. The app includes various features and Instagram-inspired animations for an improved user experience.</p>
