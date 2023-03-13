@@ -1,4 +1,3 @@
-# myOpenAI
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,7 +47,6 @@
 	<p>Contributions to this project are welcome! Here are some ways you can contribute:</p>
 	<ul>
 		<li>Submit bug reports or feature requests by opening an issue on Github.</li>
-    <li>You can get your own keys from: platform.openai.com/account/api-keys.</li>
 		<li>Improve the code by submitting a pull request.</li>
 		<li>Help others by reviewing open issues and pull requests.</li>
 	</ul>
@@ -58,5 +56,3 @@
 	<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
 </body>
 </html>
-
-
