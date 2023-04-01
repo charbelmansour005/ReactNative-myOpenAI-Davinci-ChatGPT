@@ -1,8 +1,8 @@
 import axios from "axios"
 import { CONTANTS } from "./api"
 import { Message } from "../screens/openAI/types"
-// const API_TOKEN = "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"
-// KLi4jhIw7McQSKdAcPfKT3BlbkFJFLniIGspi45iqskh0L2q works
+const API_TOKEN = ""
+
 
 interface Choice {
   message: Message
